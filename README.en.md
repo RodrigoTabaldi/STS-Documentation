@@ -2,42 +2,48 @@
 
 [Versão em português](README.md)
 
-A foundation for producing software-development technical documentation that remains consistent, traceable, and useful throughout a product's lifecycle.
+STS Documentation Generator is a practical standard for producing software technical documentation that remains consistent, traceable, and useful throughout a product lifecycle. It provides two bilingual base models, one operational skill, and a script that initializes documentation in another project with verifiable integrity.
 
-This project consolidates and organizes references and good practices from international contexts, including material associated with industry, academia, and organizations such as Google and the University of Zurich, into a bilingual STS model. Specific sources and their versions must be recorded in the generated documentation whenever applicable; this repository neither replaces nor republishes those sources.
+## Purpose and positioning
 
-## Documentation is the Code's Constitution
+STS brings widely adopted industry and academic practices — such as traceable requirements, ADRs, integration contracts, security controls, and operational evidence — into one documentation model. It is not an official standard and does not imply endorsement, certification, or affiliation with any institution cited as a source of good practices.
 
-In this project, documentation is the system's governing reference. It establishes what must be built, why, under which constraints, and how to demonstrate that the result meets expectations. Code implements those decisions; it must not silently contradict them.
+External sources that inform a document must be cited in that project's documentation, including title, version, and access date. This repository neither replaces nor republishes those sources.
 
-In practice, requirements, architecture decisions, integration contracts, data, security, operations, and acceptance criteria must remain clear, versioned, and traceable. Whenever a decision changes, the code and its documentation must evolve together.
+Under STS, documentation is the system's governing reference: it defines what will be built, why, under which constraints, and how to demonstrate the result. Code implements those decisions; material changes to requirements, interfaces, or operations should update both in the same change.
 
-## What is included
+## Repository contents
 
-- `assets/Model_STS.pdf`: the canonical Portuguese base model.
-- `assets/Model_STS_English.pdf`: the canonical English base model.
-- `SKILL.md`: operational guidance for using the models and producing project documentation.
-- `scripts/prepare-sts-project.ps1`: prepares the documentation structure in another project and verifies the integrity of copied models.
+- `assets/Model_STS.pdf` — canonical Portuguese base model.
+- `assets/Model_STS_English.pdf` — canonical English base model.
+- `SKILL.md` — one STS skill, with two operational flows: prepare the documentation baseline and generate project-specific documentation.
+- `scripts/prepare-sts-project.ps1` — initializes a documentation baseline in another project and verifies copied models with SHA-256.
 
-The PDFs under `assets/` are immutable reference artifacts: do not edit, rename, translate, recompress, or overwrite them. Each system's documentation must be created separately.
+The PDFs under `assets/` are immutable reference artifacts. Do not edit, rename, translate, recompress, or overwrite them. Completed documentation for each system must be created as separate files.
 
-## Expected documentation structure
+## STS documentation structure
 
-The STS models organize documentation around:
+The models organize documentation around:
 
-- context, objectives, and scope;
+- context, objectives, scope, and owners;
 - requirements, acceptance criteria, and traceability;
 - architecture and architecture decision records (ADRs);
 - data, integrations, and contracts;
 - quality, security, and privacy;
 - deployment, operations, and observability;
-- references, owners, and evidence.
+- references, evidence, and decision history.
 
-A section that does not apply must still be recorded with a short rationale. This keeps gaps explicit and auditable.
+If a section does not apply, retain it in the document with a short rationale. This makes boundaries and gaps explicit and auditable.
 
-## Start in a project
+## Quick start
 
-In PowerShell, run the script from this repository and point it to the project that will receive the documentation baseline:
+### Prerequisites
+
+- PowerShell 5.1 or later;
+- write permission in the destination project;
+- access to this repository.
+
+From the repository root, run the script in PowerShell and specify the project that will receive the documentation baseline:
 
 ```powershell
 ./scripts/prepare-sts-project.ps1 -Destination "C:\path\to\project" -Language both
@@ -45,24 +51,34 @@ In PowerShell, run the script from this repository and point it to the project t
 
 Accepted `-Language` values:
 
-- `pt` for Portuguese;
-- `en` for English;
-- `both` for bilingual projects.
+- `pt` — copies the Portuguese model;
+- `en` — copies the English model;
+- `both` — copies both models (default).
 
-The command creates `docs/sts-base/`, copies the selected models, creates `DOCUMENTATION_CHARTER.md`, and validates SHA-256 hashes for the copied files.
+The command creates `docs/sts-base/`, copies only the selected models, creates `DOCUMENTATION_CHARTER.md` at the destination project's root, and confirms that each copy has the same SHA-256 hash as its source. Files with the same name at the destination are replaced; confirm the destination path before running the command.
 
-## Recommended workflow
+## The two STS skill flows
 
-1. Select the model for the document's language and read the project's `DOCUMENTATION_CHARTER.md`.
-2. Gather verified facts: scope, owners, requirements, architecture, contracts, risks, operations, and evidence.
-3. Produce the project-specific document without changing the base PDFs.
-4. Preserve the sequence and meaning of the model's mandatory sections.
-5. Update documentation in the same change that modifies material decisions, interfaces, or system behavior.
+### 1. Prepare the documentation baseline
 
-## Contributing
+Use the script above to attach the immutable models and documentation charter to a project. The charter points to the selected models and records the documentation's preservation, traceability, and security rules.
 
-Preserve the repository's purpose: governing and generating technical documentation. Changes to base models require a newly approved model version, while previous files must be retained for traceability. Do not include secrets, tokens, or unnecessary personal data in documents, examples, or Git history.
+### 2. Generate project documentation
 
-## Licenses and references
+1. Select the language model and read `DOCUMENTATION_CHARTER.md`.
+2. Gather verified facts: scope, requirements, owners, architecture, contracts, risks, operations, and evidence.
+3. Create a project-specific deliverable outside `docs/sts-base/`.
+4. Preserve the model's section sequence and meaning; link IDs, ADRs, diagrams, contracts, tests, and evidence where available.
+5. Review links, owners, references, and acceptance criteria before delivery.
 
-Before distributing derived documentation or incorporating third-party material, confirm its usage rights and cite the source, version, and access date. Record those references in the project document that uses them.
+Do not include secrets, tokens, credentials, or unnecessary personal data in documentation.
+
+## Using the skill
+
+`SKILL.md` holds the instructions a compatible tool should follow when working with this standard. To make it available in your environment, install or reference this directory through the tool's skill mechanism; keep `SKILL.md`, `assets/`, and `scripts/` together because the skill depends on those relative paths.
+
+## Contribution and versioning
+
+Preserve the repository's purpose: governing and generating technical documentation. A change to a base model requires a newly approved version and retention of prior models for traceability. Changes to the script or skill must keep the README, generated charter, and actual command behavior aligned.
+
+Before distributing derived documentation or incorporating third-party material, confirm usage rights and record the source, version, and access date in the document that uses it.
